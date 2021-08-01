@@ -87,8 +87,10 @@ async def иск(ctx):
     except Error as e:
         print(f"The error '{e}' occurred")
 
-@client.command() #временно вмер
+@client.command()
 async def вердикт(ctx):
+    pl1 = ctx.author.id
+    role = discord.utils.get(ctx.guild.roles, id=ROLE ID)
     try:
         connection = mysql.connector.connect(
             host='127.0.0.1',
@@ -99,7 +101,7 @@ async def вердикт(ctx):
         cursor = connection.cursor()
         delo = 0
         print(ctx.message.author.roles)
-        if ctx.message.author.roles == 'Судья':
+        if role in ctx.author.roles:
             await ctx.reply('Укажите номер дела')
             def check(r):
                 return r.author.id == pl1
@@ -130,11 +132,8 @@ async def вердикт(ctx):
             connection.commit()
         except Exception as ex:
             print('ВЕРДИКТ')
-            print(f"The error '{e}' occurred")
     except Exception as ex:
         print('ВЕРДИКТ')
-        print(f"The error '{e}' occurred")
-
 
 @client.command()
 async def дело(ctx, *, deloansw):
@@ -231,7 +230,7 @@ async def заявки(ctx):
     except Error as e:
         print(f"The error '{e}' occurred")
         
-client.run('ODQzNDI4ODk1NjQyMzUzNjY2.YKDuXg.omKMZnpn94akjx3ceGJdiMppWgc')
+client.run('???')
 #!новое дело
 #Tesaurus#0294
 #1.3
