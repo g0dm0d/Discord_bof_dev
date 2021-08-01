@@ -5,11 +5,10 @@ import mysql
 import mysql.connector
 try:
     connection = mysql.connector.connect(
-    host='remotemysql.com',
-    port=3306,
-    user='tTRNU5Exlf',
-    password='WRCg2k1Wwy',
-    database='tTRNU5Exlf'
+    host='127.0.0.1',
+    user='root',
+    password='',
+    database='bof'
     )
 
     try:
