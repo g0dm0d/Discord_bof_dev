@@ -4,6 +4,7 @@ from discord import member
 from discord.ext import commands
 from discord.ext.commands import Bot
 from discord import member
+from discord import DMChannel
 import os
 import shutil
 import sys
@@ -12,7 +13,7 @@ import mysql.connector
 from mysql.connector import Error
 client = commands.Bot(command_prefix = '!')
 
-num_delo = 4
+num_delo = 11
 pl1 = None
 pl2 = str()
 st = str()
@@ -37,10 +38,10 @@ async def иск(ctx):
         cursor = connection.cursor()
     
         global num_delo
-        nick = ctx.author.display_name
+        nick = ctx.message.author
         pl1 = ctx.author.id
 
-        await ctx.reply('Укажите ник игрока (@User#0000)')
+        await ctx.reply('Укажите ник игрока (User#0000)')
         print(pl1)
         def check(q):
             return q.author.id == pl1
@@ -90,7 +91,7 @@ async def иск(ctx):
 @client.command()
 async def вердикт(ctx):
     pl1 = ctx.author.id
-    role = discord.utils.get(ctx.guild.roles, id=ROLE ID)
+    role = discord.utils.get(ctx.guild.roles, id=870310728270225500)
     try:
         connection = mysql.connector.connect(
             host='127.0.0.1',
@@ -229,8 +230,54 @@ async def заявки(ctx):
             await ctx.channel.send(embed=embed)
     except Error as e:
         print(f"The error '{e}' occurred")
-        
-client.run('???')
+@client.command(pass_context=True)
+async def мои_дела(ctx):
+    pl1 = ctx.author.id
+    try:
+        connection = mysql.connector.connect(
+            host='127.0.0.1',
+            user='root',
+            password='',
+            database='bof'
+        )
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM sud WHERE disid='%s'"% (pl1))
+        print("SELECT * FROM sud WHERE disid='%s'"% (pl1))
+        rows = cursor.fetchall()
+        print(rows)
+        await ctx.author.send('**ВАШИ ИСКИ**')
+        for row in rows:
+            embed = discord.Embed(
+            title = '---------------------------------------------------------------------',
+            colour = discord.Colour.dark_magenta()
+            )
+            embed.add_field(name='Дело:', value=row[0], inline=False)
+            embed.add_field(name='Подающий:', value='<@!'+row[6]+'>', inline=False)
+            embed.add_field(name='Виновный:', value=row[2], inline=False)
+            embed.add_field(name='Статьи:', value=row[3], inline=False)
+            embed.add_field(name='Подобности:', value=row[4], inline=False)
+            embed.add_field(name='Вердикт:', value=row[5], inline=False)
+            await ctx.author.send(embed=embed)
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM sud WHERE pl2='<@!%s>'", pl1)
+        rows = cursor.fetchall()
+        print(rows)
+        await ctx.author.send('**ИСКИ ПРОТИВ ВАС**')
+        for row in rows:
+            embed = discord.Embed(
+            title = '---------------------------------------------------------------------',
+            colour = discord.Colour.dark_magenta()
+            )
+            embed.add_field(name='Дело:', value=row[0], inline=False)
+            embed.add_field(name='Подающий:', value='<@!'+row[6]+'>', inline=False)
+            embed.add_field(name='Виновный:', value=row[2], inline=False)
+            embed.add_field(name='Статьи:', value=row[3], inline=False)
+            embed.add_field(name='Подобности:', value=row[4], inline=False)
+            embed.add_field(name='Вердикт:', value=row[5], inline=False)
+            await ctx.author.send(embed=embed)
+    except Error as e:
+        print(f"The error '{e}' occurred")
+client.run('. _.')
 #!новое дело
 #Tesaurus#0294
 #1.3
