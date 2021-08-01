@@ -13,7 +13,7 @@ import mysql.connector
 from mysql.connector import Error
 client = commands.Bot(command_prefix = '!')
 
-num_delo = 11
+num_delo = 0
 pl1 = None
 pl2 = str()
 st = str()
